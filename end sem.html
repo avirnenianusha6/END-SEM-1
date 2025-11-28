@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h3>Student Marks Table</h3>
+
+<!-- Filters -->
+Subject:
+<select id="sub" onchange="filterTable()">
+  <option value="">All</option>
+  <option>Maths</option>
+  <option>Science</option>
+  <option>English</option>
+</select>
+
+Min:
+<input type="number" id="min" oninput="filterTable()" style="width:60px;">
+Max:
+<input type="number" id="max" oninput="filterTable()" style="width:60px;">
+
+<table border="1" cellpadding="8" style="margin-top:10px;">
+  <thead>
+    <tr>
+      <th onclick="sortTable('name')">Name</th>
+      <th onclick="sortTable('subject')">Subject</th>
+      <th onclick="sortTable('marks')">Marks</th>
+    </tr>
+  </thead>
+  <tbody id="data"></tbody>
+</table>
+
+<script>
+let data = [
+  {name:"Anusha", subject:"Maths", marks:85},
+  {name:"Ravi", subject:"Science", marks:92},
+  {name:"Priya", subject:"English", marks:78},
+  {name:"Manoj", subject:"Maths", marks:67}
+];
+
+let dir = {name:1, subject:1, marks:1};
+
+function show(d){
+  document.getElementById("data").innerHTML =
+    d.map(x=>`<tr><td>${x.name}</td><td>${x.subject}</td><td>${x.marks}</td></tr>`).join("");
+}
+
+function sortTable(col){
+  data.sort((a,b)=>(a[col]>b[col]?1:-1)*dir[col]);
+  dir[col]*=-1;
+  show(data);
+}
+
+function filterTable(){
+  let s=document.getElementById("sub").value;
+  let min=document.getElementById("min").value;
+  let max=document.getElementById("max").value;
+
+  let f=data.filter(x =>
+    (s=="" || x.subject==s) &&
+    (min=="" || x.marks>=min) &&
+    (max=="" || x.marks<=max)
+  );
+  show(f);
+}
+
+show(data);
+</script>
+</body>
+</html>
